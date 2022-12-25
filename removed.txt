@@ -1,0 +1,64 @@
+
+local function get_arduino_cli()
+  if vim.fn.executable('arduino-cli') ~= 1 then
+    vim.notify('Arduino-wrapper: arduino-cli not found', vim_error)
+    return nil
+  end
+
+  local dump = vim.fn.system('arduino-cli', 'config', 'dump')
+
+  local regex = vim.regex('(?:data:) (.+)')
+  local beginstr, endstr = regex:match_str(dump)
+
+  if not beginstr then
+    vim.notify([["Arduino wrapper error: 
+    command 'arduino-cli config dump' returned incorrect data"]], vim_error)
+    return nil
+  end
+
+  local path = string.sub(dump, beginstr, endstr)
+  local filepath = path .. 'arduino-cli.yaml'
+  return filepath
+end
+
+function open_window(size)
+  local api = vim.api
+  local buf, win
+
+  buf = api.nvim_create_buf(false, true)
+
+  api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+
+  local height = size.height
+  local width = size.width
+
+  local width_auto = size.width_auto
+  local height_auto = size.height_auto
+
+  local vim_width = api.nvim_get_option('columns')
+  local vim_height = api.nvim_get_option('lines')
+
+  if width_auto then
+    width = math.ceil(vim_width * width_auto)
+  end
+
+  if height_auto then
+    height = math.ceil(vim_height * height_auto - 2)
+  end
+
+  local row = math.ceil((vim_height - height) / 2 - 1)
+  local col = math.ceil((vim_width - width) / 2)
+
+  local opts = {
+    style = 'minimal',
+    relative = 'editor',
+    width = width,
+    height = height,
+    row = row,
+    col = col
+  }
+
+  win = api.nvim_open_win(buf, true, opts)
+
+  return buf, win
+end
