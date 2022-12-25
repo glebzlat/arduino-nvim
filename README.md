@@ -18,7 +18,6 @@ sketch directory and manages FQBNs.
     - [Default configuration](#default-configuration)
 - [Limitations](#limitations)
 
-
 # Requirements
 
 Due to the simplicity, `ArduinoLSP.nvim` does not have a lot of requirements.
@@ -66,9 +65,9 @@ except [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
 Function `arduinolsp.get_arduinocli_datapath()` will automatically invoke
 arduino-cli and ask it for a path. You can pass a path to arduino
-to this function to ask. In this case function will store this path
-to the configs, and, as its called before `setup` function, you 
-don't need to specify this pass on setup.
+to this function. In this case function will store this path
+to the configs, and, as its called before `setup()` function, you 
+don't need to specify this parameter on setup.
 
 Though the `arduinolsp.get_arduinocli_datapath()` function
 makes setup easer, it can slow down setup process a bit,
