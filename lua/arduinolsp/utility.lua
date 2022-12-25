@@ -45,10 +45,10 @@ function M.deserialize(str, vars)
   if not f then return nil, _err end -- syntax error?
   -- set up safe runner
   local co = coroutine.create(f)
-  local hook = function(why)
-    error('Deserialization error: ' .. why, 1)
-  end
-  debug.sethook(co, hook, "", 1000000)
+  -- local hook = function(why)
+  --   error('Deserialization error: ' .. why, 1)
+  -- end
+  -- debug.sethook(co, hook, "", 1000)
   -- now run the deserialization
   return condfail(coroutine.resume(co))
 end
