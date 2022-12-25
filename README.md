@@ -21,7 +21,8 @@ sketch directory and manages FQBNs.
 
 # Requirements
 
-Due to the simplicity, this plugin has not a little amount of requirements:
+Due to the simplicity, `ArduinoLSP.nvim` does not have a lot of requirements.
+All requirements are:
 
 - neovim `>= 0.7.0` (but maybe it will work on older versions)
 - arduino-cli
