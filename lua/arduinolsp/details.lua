@@ -31,7 +31,7 @@ function M.get_data_from_config()
   fqbn_table, message = utility.deserialize(data)
 
   if not fqbn_table then
-    M.vim_warn(('%s Config deserialization error: %s')
+    M.warn(('%s Config deserialization error: %s')
       :format(M.plugname, message))
     return {}
   end
