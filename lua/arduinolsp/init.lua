@@ -5,6 +5,8 @@ local details = require 'arduinolsp.details'
 
 local M = {}
 
+---Setup function
+---@param config table
 function M.setup(config)
   settings.sketchdir = false
 
@@ -13,13 +15,13 @@ function M.setup(config)
   settings.set(config)
   local conf = settings.current
 
-  if utility.is_empty(conf.clangd_path) then
-    details.error('clangd_path is empty')
+  if vim.fn.executable(conf.clangd) ~= 1 then
+    details.error(('%s is not and executable'):format(conf.clangd))
     return
   end
 
-  if utility.is_empty(conf.arduino_cli_config_dir) then
-    details.error('arduino_cli_config_dir is empty')
+  if utility.is_empty(conf.arduino_config_dir) then
+    details.error('arduino_config_dir is empty')
     return
   end
 
@@ -28,12 +30,15 @@ function M.setup(config)
   end
 end
 
+---Called by lspconfig, configures language server
+---@param config table
+---@param root_dir string
 function M.on_new_config(config, root_dir)
   local m_settings = settings.current
   local fqbn = details.get_fqbn(root_dir)
 
   local config_dir = path.concat {
-    m_settings.arduino_cli_config_dir, 'arduino-cli.yaml'
+    m_settings.arduino_config_dir, 'arduino-cli.yaml'
   }
 
   settings.config_dir = config_dir
@@ -42,11 +47,15 @@ function M.on_new_config(config, root_dir)
   config.cmd = {
     'arduino-language-server',
     '-cli-config', config_dir,
-    '-clangd', m_settings.clangd_path,
+    '-clangd', m_settings.clangd,
+    '-cli', settings.current.arduino,
     '-fqbn', fqbn
   }
+
+  details.warn(details.serialize(config.cmd))
 end
 
+---Prints current config
 function M.dump_config()
   if not settings.sketchdir then
     print(('%s Current directory is not a sketch directory')
@@ -61,10 +70,10 @@ function M.dump_config()
   local dir = vim.fn.getcwd()
   local fqbn = fqbn_table[dir]
 
-  print('Arduino-cli config directory: ' .. settings.config_dir)
-  print('Clangd path: ' .. settings.current.clangd_path)
-
-  print('Current FQBN: ' .. fqbn)
+  print(('Arduino config directory: %q'):format(settings.config_dir))
+  print(('Clangd: %q'):format(settings.current.clangd))
+  print(('Arduino: %q'):format(settings.current.arduino))
+  print(('Current FQBN: %q'):format(fqbn))
 end
 
 function M.set_fqbn(fqbn)
@@ -96,28 +105,31 @@ function M.clean_config()
     .. ' nonexistent directories from config')
 end
 
--- Helper function
--- Automatically invokes command 'arduino-cli config dump',
--- parses result and returns path to arduino-cli data
--- Unnecessary argument arduinocli_path is intended for
--- the case, if arduino-cli is not placed in $PATH
----@ param arduinocli_path string
-function M.get_arduinocli_datapath(arduinocli_path)
-  if type(arduinocli_path) ~= 'string' then
-    arduinocli_path = 'arduino-cli'
-  end
+---Calls arduino program, parses its data path and returns.
+---Unnecessary argument - path to the program (by default function finds
+---path to 'arduino-cli'). If passed, it will be stored in settings and
+---called to determine the data path.
+---@nodiscard
+---@param arduino? string
+---@return string|nil
+function M.get_arduinocli_datapath(arduino)
+  if type(arduino) == "string" then
+    if vim.fn.executable(arduino) ~= 1 then
+      details.error(("%q is not an executable"):format(arduino))
+      return nil
+    end
 
-  if vim.fn.executable(arduinocli_path) ~= 1 then
-    details.error(("%q executable not found"):format(arduinocli_path))
-    return nil
+    settings.current.arduino = arduino
+  else
+    arduino = settings.current.arduino
   end
 
   local output = vim.fn.system({
-    arduinocli_path, 'config', 'dump'
+    arduino, 'config', 'dump'
   })
 
   if not output then
-    details.error(('no output from %q'):format(arduinocli_path))
+    details.error(('no output from %q'):format(arduino))
     return nil
   end
 
@@ -126,7 +138,7 @@ function M.get_arduinocli_datapath(arduinocli_path)
 
   if not str_beg then
     details.error(('unexpected data from %q, regex error')
-      :format(arduinocli_path))
+      :format(arduino))
     return nil
   end
 
