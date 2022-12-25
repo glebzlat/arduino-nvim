@@ -1,10 +1,14 @@
+local path = require 'arduinolsp.path'
+
 local M = {}
 
 local DEFAULT_SETTINGS = {
   default_fqbn = 'arduino:avr:uno',
-  config_dir = vim.fn.stdpath 'data' .. '/arduinolsp',
-  clangd_path = '',
-  arduino_cli_config_dir = '',
+  config_dir = path.concat { vim.fn.stdpath 'data', 'arduinolsp' },
+  -- clangd = find_for_clangd(),
+  clangd = path.find_path { 'clangd' },
+  arduino = path.find_path { 'arduino-cli', 'arduino' },
+  arduino_config_dir = '',
 }
 
 M._default_settings = DEFAULT_SETTINGS
