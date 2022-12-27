@@ -15,7 +15,7 @@ function M.setup(config)
   settings.set(config)
   local conf = settings.current
 
-  if vim.fn.executable(conf.clangd) ~= 1 then
+  if not details.is_exe(conf.clangd) then
     details.error(('%s is not and executable'):format(conf.clangd))
     return
   end
@@ -25,7 +25,7 @@ function M.setup(config)
     return
   end
 
-  if vim.fn.isdirectory(conf.config_dir) ~= 1 then
+  if not details.is_dir(conf.config_dir) then
     vim.fn.mkdir(conf.config_dir, '')
   end
 end
@@ -95,7 +95,7 @@ function M.clean_config()
 
   local counter = 0
   for dirname, _ in pairs(fqbn_table) do
-    if vim.fn.isdirectory(dirname) ~= 1 then
+    if not details.is_dir(dirname) then
       fqbn_table[dirname] = nil
       counter = counter + 1
     end
@@ -114,7 +114,7 @@ end
 ---@return string|nil
 function M.get_arduinocli_datapath(arduino)
   if type(arduino) == "string" then
-    if vim.fn.executable(arduino) ~= 1 then
+    if not details.is_exe(arduino) then
       details.error(("%q is not an executable"):format(arduino))
       return nil
     end
