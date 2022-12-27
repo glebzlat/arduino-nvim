@@ -22,6 +22,24 @@ function M.warn(msg)
   vim.notify(M.plugname .. ' warning: ' .. msg, vim.log.levels.WARN)
 end
 
+---Returns true, if o is executable, false otherwise
+---@param o string
+---@nodiscard
+---@return boolean
+function M.is_exe(o)
+  assert(type(o) == "string")
+  return vim.fn.executable(o) == 1
+end
+
+---Returns true, if o is a directory, false otherwise
+---@nodiscard
+---@param o string
+---@return boolean
+function M.is_dir(o)
+  assert(type(o) == "string")
+  return vim.fn.isdirectory(o) == 1
+end
+
 function M.get_data_from_config()
   local data, message = utility.read_file(M.config_file)
 
