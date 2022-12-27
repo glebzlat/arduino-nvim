@@ -1,5 +1,6 @@
 local settings = require 'arduinolsp.settings'
 local details = require 'arduinolsp.details'
+local utility = require 'arduinolsp.utility'
 
 local Api = {}
 
