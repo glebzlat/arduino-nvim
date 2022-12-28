@@ -1,6 +1,6 @@
-local settings = require 'arduinolsp.settings'
-local utility = require 'arduinolsp.utility'
-local path = require 'arduinolsp.path'
+local settings = require 'arduino.settings'
+local utility = require 'arduino.utility'
+local path = require 'arduino.path'
 
 local M = {
   plugname = '[ArduinoLSP.nvim]',
@@ -13,6 +13,8 @@ local M = {
 M.config_file = path.concat {
   settings.current.config_dir, M.configname
 }
+
+M.on_fqbn_reset = settings.current.on_fqbn_reset
 
 function M.error(msg)
   vim.notify(M.plugname .. ' error: ' .. msg, vim.log.levels.ERROR)

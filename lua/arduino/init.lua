@@ -1,7 +1,7 @@
-local settings = require 'arduinolsp.settings'
-local utility = require 'arduinolsp.utility'
-local path = require 'arduinolsp.path'
-local details = require 'arduinolsp.details'
+local settings = require 'arduino.settings'
+local utility = require 'arduino.utility'
+local path = require 'arduino.path'
+local details = require 'arduino.details'
 
 local M = {}
 
