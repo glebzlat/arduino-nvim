@@ -6,8 +6,8 @@ it requires the FQBN (Fully Qualified Board Name) and the
 arduino-cli config. This wrapper stores configs for lsp for each
 sketch directory and manages FQBNs.
 
-*Currently plugin is under active development, so documentation
-may differ with the plugin code. *
+> *Currently plugin is under active development, so documentation
+> may differ with the plugin code. *
 
 # Table of Contents
 
