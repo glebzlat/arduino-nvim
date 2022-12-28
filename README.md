@@ -6,6 +6,9 @@ it requires the FQBN (Fully Qualified Board Name) and the
 arduino-cli config. This wrapper stores configs for lsp for each
 sketch directory and manages FQBNs.
 
+*Currently plugin is under active development, so documentation
+may differ with the plugin code. *
+
 # Table of Contents
 
 - [Requirements](#requirements)
@@ -97,7 +100,7 @@ require 'arduinolsp'.setup({
 
 # Commands
 
-- `:ArduinoSetFqbn <fqbn>` - set fqbn to the current sketch 
+- `:ArduinoSetFQBN <fqbn>` - set fqbn to the current sketch 
 (nvim restart required)
 - `:ArduinoDump` - prints current config
 - `:ArduinoClean` - removes nonexistent sketch directories from config
