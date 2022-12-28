@@ -1,4 +1,4 @@
-# ArduinoLSP.nvim
+# Arduino.nvim
 
 Simple wrapper for arduino-language-server, written in Lua.
 Arduino-language-server is not fully bootstrapped out of the box,
@@ -23,7 +23,7 @@ so documentation may differ with the plugin code.*
 
 # Requirements
 
-Due to the simplicity, `ArduinoLSP.nvim` does not have a lot of requirements.
+Due to the simplicity, `Arduino.nvim` does not have a lot of requirements.
 All requirements are:
 
 - neovim `>= 0.7.0` (but maybe it will work on older versions)
@@ -35,44 +35,44 @@ All requirements are:
 ## [Packer](https://github.com/wbthomason/packer.nvim)
 
 ```lua
-use 'edKotinsky/arduinolsp.nvim'
+use 'edKotinsky/arduino.nvim'
 ```
 
 ## vim-plug
 
 ```vim
-Plug 'edKotinsky/arduinolsp.nvim'
+Plug 'edKotinsky/arduino.nvim'
 ```
 
 # Setup
 
 ```lua
-require 'arduinolsp'.setup({
-    arduino_cli_config_dir = arduinolsp.get_arduinocli_datapath()
+require 'arduino'.setup({
+    arduino_cli_config_dir = arduino.get_arduinocli_datapath()
 })
 ```
 
 ```lua
 require 'lspconfig' ['arduino_language_server'].setup {
-    on_new_config = arduinolsp.on_new_config,
+    on_new_config = arduino.on_new_config,
 }
 ```
 
 Plugin will configure the LSP command, and fully configure yourself,
-when `arduinolsp.on_new_config()` called.
+when `arduino.on_new_config()` called.
 
 Note that I have not tested this plugin with other LSP managers 
 except [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
 ## Get arduino data path automatically
 
-Function `arduinolsp.get_arduinocli_datapath()` will automatically invoke
+Function `arduino.get_arduinocli_datapath()` will automatically invoke
 arduino-cli and ask it for a path. You can pass a path to arduino
 to this function. In this case function will store this path
 to the configs, and, as its called before `setup()` function, you 
 don't need to specify this parameter on setup.
 
-Though the `arduinolsp.get_arduinocli_datapath()` function
+Though the `arduino.get_arduinocli_datapath()` function
 makes setup easer, it can slow down setup process a bit,
 so you can get this path manually from `arduino-cli config dump`
 command output (line "Data: /path/to/.arduino"). 
@@ -92,7 +92,7 @@ require 'mason'.setup({
     -- other settings
 })
 
-require 'arduinolsp'.setup({
+require 'arduino'.setup({
     clangd = mason_root_dir .. '/bin/clangd',
     -- other settings
 })
@@ -120,7 +120,7 @@ however, if they're not found, corresponding fields will be empty.
 ```lua
 local DEFAULT_SETTINGS = {
     default_fqbn = 'arduino:avr:uno',
-    config_dir = path.concat { vim.fn.stdpath 'data', 'arduinolsp' },
+    config_dir = path.concat { vim.fn.stdpath 'data', 'arduino_nvim' },
     clangd = '/path/to/clangd' or nil,
     arduino = '/path/to/arduino' or nil,
     arduino_config_dir = '',
@@ -129,10 +129,10 @@ local DEFAULT_SETTINGS = {
 
 # Limitations
 
-To initialize `ArduinoLSP.nvim` in a sketch directory, you need to
+To initialize `Arduino.nvim` in a sketch directory, you need to
 open .ino file first (of course, if you have any files except .ino).
 
 If the current directory is not a sketch directory or if plugin is
 not configurated (`on_new_config()` not invoked), invocation of
-`:ArduinoDump` and `:ArduinoSetFqbn` commands has no effect.
+`:ArduinoDump` and `:ArduinoSetFQBN` commands has no effect.
 
