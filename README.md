@@ -29,6 +29,8 @@ All requirements are:
 - neovim `>= 0.7.0` (but maybe it will work on older versions)
 - arduino-cli
 - clangd
+- arduino-language-server
+- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
 
 # Installation
 
@@ -60,9 +62,6 @@ require 'lspconfig' ['arduino_language_server'].setup {
 
 Plugin will configure the LSP command, and fully configure yourself,
 when `arduino.on_new_config()` called.
-
-Note that I have not tested this plugin with other LSP managers 
-except [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
 ## Get arduino data path automatically
 
