@@ -23,11 +23,6 @@ local DEFAULT_SETTINGS = {
   ---Data directory of arduino-cli
   ---@type string
   arduino_config_dir = '',
-
-  ---Callback called every time after ArduinoSetFQBN is invoked.
-  ---May be used for LSP restart
-  ---@type function
-  after_fqbn_reset = function() end
 }
 
 M._default_settings = DEFAULT_SETTINGS
