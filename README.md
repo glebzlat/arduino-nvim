@@ -112,7 +112,7 @@ You can create autocommand with event ArduinoFqbnReset for some actions
 after `:ArduinoSetFQBN` command. For example, you can restart LSP to apply 
 change:
 
-```
+```lua
 vim.api.nvim_create_autocmd('User', {
   pattern = 'ArduinoFqbnReset',
   callback = function()
