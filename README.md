@@ -6,6 +6,11 @@ it requires the FQBN (Fully Qualified Board Name) and the
 arduino-cli config. This wrapper stores configs for lsp for each
 sketch directory and manages FQBNs.
 
+*Plugin is under development. Something may not work, documentation may
+differ with the code and some features may be undocumented at all. 
+If you found a mistake, or you have an idea how to improve `Arduino.nvim`, 
+feel free to create an issue or open a pull request. Enjoy!*
+
 # Table of Contents
 
 - [Requirements](#requirements)
