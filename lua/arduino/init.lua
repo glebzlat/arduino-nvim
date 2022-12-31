@@ -35,6 +35,8 @@ function M.setup(config)
   end
 end
 
+local cli = require 'arduino.cli'
+
 ---Called by lspconfig, configures language server
 ---@param config table
 ---@param root_dir string
@@ -43,7 +45,7 @@ function M.on_new_config(config, root_dir)
   local fqbn = details.get_fqbn(root_dir)
 
   local config_dir = path.concat {
-    m_settings.arduino_config_dir, 'arduino-cli.yaml'
+    m_settings.arduino_config_dir, cli.configfile
   }
 
   settings.config_dir = config_dir
@@ -77,16 +79,14 @@ function M.get_arduinocli_datapath(arduino)
     arduino = settings.current.arduino
   end
 
-  local output = vim.fn.system({
-    arduino, 'config', 'dump'
-  })
+  local output = vim.fn.system(cli.config_dump)
 
   if not output then
     details.error(('no output from %q'):format(arduino))
     return nil
   end
 
-  local regex = vim.regex(details.data_regexp_pattern)
+  local regex = vim.regex(cli.data_regexp_pattern)
   local str_beg, str_end = regex:match_str(output)
 
   if not str_beg then

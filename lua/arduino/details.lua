@@ -5,9 +5,6 @@ local path = require 'arduino.path'
 local M = {
   plugname = '[ArduinoLSP.nvim]',
   configname = 'arduinolsp_config',
-  -- Regex for finding the data path from 'arduino-cli config dump' output
-  data_regexp_pattern =
-  '\\Mdata: \\zs\\[-\\/\\\\.[:alnum:]_~]\\+\\ze\\[[:space:]\\n]'
 }
 
 M.config_file = path.concat {
