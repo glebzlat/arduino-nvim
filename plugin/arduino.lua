@@ -24,7 +24,7 @@ end, {})
 
 command('ArduinoSetFQBN', function(arg)
   local msg = api.set_fqbn(arg.args)
-  details.on_fqbn_reset()
+  vim.cmd 'doautocmd User ArduinoFqbnReset'
   print(msg)
 end, {
   nargs = 1
