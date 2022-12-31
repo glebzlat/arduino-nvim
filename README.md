@@ -108,6 +108,19 @@ not installed in your $PATH. Though, if you're using
 `get_arduinocli_datapath()` function, you can give a path to arduino as
 its parameter instead of passing it as a field to `setup()`.
 
+You can create autocommand with event ArduinoFqbnReset for some actions
+after `:ArduinoSetFQBN` command. For example, you can restart LSP to apply 
+change:
+
+```
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'ArduinoFqbnReset',
+  callback = function()
+    vim.cmd('LspRestart')
+  end
+})
+```
+
 ## Default configuration
 
 Plugin will try to locate clangd and arduino-cli automatically,
@@ -135,11 +148,6 @@ local DEFAULT_SETTINGS = {
   ---Data directory of arduino-cli
   ---@type string
   arduino_config_dir = '',
-
-  ---Callback called every time after ArduinoSetFQBN is invoked.
-  ---May be used for LSP restart
-  ---@type function
-  after_fqbn_reset = function() end
 }
 ```
 
