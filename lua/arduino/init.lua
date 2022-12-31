@@ -16,12 +16,17 @@ function M.setup(config)
   local conf = settings.current
 
   if not details.is_exe(conf.clangd) then
-    details.error(('%s is not and executable'):format(conf.clangd))
+    details.error(('%s is not an executable'):format(tostring(conf.clangd)))
     return
   end
 
   if utility.is_empty(conf.arduino_config_dir) then
     details.error('arduino_config_dir is empty')
+    return
+  end
+
+  if utility.is_empty(conf.config_dir) then
+    details.error('Config dir is not specified')
     return
   end
 
