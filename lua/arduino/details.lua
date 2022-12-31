@@ -14,8 +14,6 @@ M.config_file = path.concat {
   settings.current.config_dir, M.configname
 }
 
-M.on_fqbn_reset = settings.current.on_fqbn_reset
-
 function M.error(msg)
   vim.notify(M.plugname .. ' error: ' .. msg, vim.log.levels.ERROR)
 end
@@ -53,9 +51,7 @@ function M.get_data_from_config()
   fqbn_table, message = utility.deserialize(data)
 
   if not fqbn_table then
-    M.warn(('%s Config deserialization error: %s')
-      :format(M.plugname, message))
-    return {}
+    M.warn(('Config deserialization error: %s'):format(message))
   end
 
   return fqbn_table
