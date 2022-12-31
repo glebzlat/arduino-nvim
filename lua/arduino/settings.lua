@@ -3,12 +3,30 @@ local path = require 'arduino.path'
 local M = {}
 
 local DEFAULT_SETTINGS = {
+  ---Plugin will set FQBN of the current sketch to default, if
+  ---user not specified it
+  ---@type string
   default_fqbn = 'arduino:avr:uno',
+
+  ---Directory where Arduino.nvim will store its data
+  ---@type string
   config_dir = path.concat { vim.fn.stdpath 'data', 'arduino_nvim' },
-  -- clangd = find_for_clangd(),
+
+  ---Path to clangd executable
+  ---@type string|nil Nil if clangd is not found
   clangd = path.find_path { 'clangd' },
+
+  ---Path to arduino-cli executable
+  ---@type string|nil Nil if arduino-cli is not found
   arduino = path.find_path { 'arduino-cli' },
+
+  ---Data directory of arduino-cli
+  ---@type string
   arduino_config_dir = '',
+
+  ---Callback called every time after ArduinoSetFQBN is invoked.
+  ---May be used for LSP restart
+  ---@type function
   after_fqbn_reset = function() end
 }
 
