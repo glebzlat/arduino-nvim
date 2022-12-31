@@ -148,7 +148,6 @@ local DEFAULT_SETTINGS = {
 To initialize `Arduino.nvim` in a sketch directory, you need to
 open .ino file first (of course, if you have any files except .ino).
 
-If the current directory is not a sketch directory or if plugin is
-not configurated (`on_new_config()` not invoked), invocation of
+If `Arduino.nvim` is not initialized, invocation of
 `:ArduinoDump` and `:ArduinoSetFQBN` commands has no effect.
 
