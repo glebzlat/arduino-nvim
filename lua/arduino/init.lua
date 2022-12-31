@@ -56,8 +56,6 @@ function M.on_new_config(config, root_dir)
     '-cli', settings.current.arduino,
     '-fqbn', fqbn
   }
-
-  details.warn(details.serialize(config.cmd))
 end
 
 ---Calls arduino program, parses its data path and returns.
