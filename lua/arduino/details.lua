@@ -24,11 +24,12 @@ function M.warn(msg)
   vim.notify(M.plugname .. ' warning: ' .. msg, vim.log.levels.WARN)
 end
 
----Returns true, if o is executable, false otherwise
+---Returns true, if o is an executable, false otherwise
 ---@param o string
 ---@nodiscard
 ---@return boolean
 function M.is_exe(o)
+  if not o then return false end
   assert(type(o) == "string")
   return vim.fn.executable(o) == 1
 end
@@ -38,6 +39,7 @@ end
 ---@param o string
 ---@return boolean
 function M.is_dir(o)
+  if not o then return false end
   assert(type(o) == "string")
   return vim.fn.isdirectory(o) == 1
 end
