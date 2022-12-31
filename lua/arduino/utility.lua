@@ -57,13 +57,15 @@ function M.read_file(filename)
   local file, msg = io.open(filename, 'r')
   if not file then return nil, msg end
   local str = file:read("a")
+  file:close()
   return str
 end
 
 function M.write_file(filename, str)
   local file, msg = io.open(filename, 'w')
   if not file then return nil, msg end
-  file, msg = file:write(str)
+  _, msg = file:write(str)
+  file:close()
   if msg then return nil, msg end
   return true
 end
