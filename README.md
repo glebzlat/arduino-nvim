@@ -180,3 +180,12 @@ open .ino file first (of course, if you have any files except .ino).
 If `Arduino.nvim` is not initialized, invocation of
 `:ArduinoDump` and `:ArduinoSetFQBN` commands has no effect.
 
+If you have clangd installed and you open a C/C++ file while `Arduino.nvim`
+configured, nvim-lspconfig will attach both clangd and arduino-language-server.
+Clangd without compile_commands.json will give a lot of errors. It is not
+a mistake, just clangd is not configured. Stop it with `:LspStop clangd`.
+*Fix will be soon*.
+
+If your arduino-language-server is really slow, it is not caused by the plugin.
+Though, I will work on it.
+
