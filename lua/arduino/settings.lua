@@ -27,7 +27,7 @@ local DEFAULT_SETTINGS = {
 
 M._default_settings = DEFAULT_SETTINGS
 M.current = M._default_settings
-M.sketchdir = false
+M.configured = false
 
 function M.set(config)
   M.current = vim.tbl_deep_extend('force',
