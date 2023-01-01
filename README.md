@@ -21,6 +21,7 @@ Enjoy!:zap::zap::zap:*
     - [Clang via Mason.nvim](#clang-via-mason.nvim)
 - [Commands](#commands)
 - [Configuration](#configuration)
+    - [Autocommands](#autocommands)
     - [Default configuration](#default-configuration)
 - [Limitations](#limitations)
 
@@ -102,8 +103,11 @@ require 'arduino'.setup({
 
 # Commands
 
-- `:ArduinoSetFQBN <fqbn>` - set fqbn to the current sketch 
-(nvim restart required)
+- `:ArduinoSetFQBN [fqbn]` - set fqbn to the current sketch. You can create 
+autocommand to be executed right after this command performed. So you don't
+need to restart nvim after resetting FQBN, see [autocommands](#autocommands).
+Without argument, will present choose dialog.
+- `:ArduinoChooseBoard` - same as `:ArduinoSetFQBN`.
 - `:ArduinoDump` - prints current config
 - `:ArduinoClean` - removes nonexistent sketch directories from config
 
@@ -114,9 +118,12 @@ not installed in your $PATH. Though, if you're using
 `get_arduinocli_datapath()` function, you can give a path to arduino as
 its parameter instead of passing it as a field to `setup()`.
 
-You can create autocommand with event ArduinoFqbnReset for some actions
-after `:ArduinoSetFQBN` command. For example, you can restart LSP to apply 
-change:
+## Autocommands
+
+`Arduino.nvim` has its own events to allow user to customize its behaviour.
+
+- `ArduinoFqbnReset` - After `:ArduinoSetFQBN` and `:ArduinoChooseBoard`.
+You can automatically restart LSP to apply board change:
 
 ```lua
 vim.api.nvim_create_autocmd('User', {
