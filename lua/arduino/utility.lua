@@ -7,6 +7,28 @@ function M.is_empty(str)
   return false
 end
 
+---Checks type of o, if o not match with the given typenames, will
+---throw an error and return false.
+---@param o any
+---@param ... type
+---@return boolean
+function M.check_type(o, ...)
+  local args = { ... }
+  local type = type(o)
+
+  for _, typename in ipairs(args) do
+    if type == typename then return true end
+  end
+
+  local typenames = ''
+  for _, typename in ipairs(args) do
+    typenames = typenames .. ' ' .. typename
+  end
+
+  error('Type check failed: expected ' .. typenames .. ' got ' .. type)
+  return false
+end
+
 local function serialize_impl(o, level)
   if type(o) == 'string' then return '"' .. o .. '"' end
   if type(o) ~= 'table' then return tostring(o) end
