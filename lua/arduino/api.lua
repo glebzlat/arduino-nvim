@@ -51,15 +51,17 @@ end
 ---Removes entries with a directories, which are not exist in a filesystem
 ---@return string
 function Api.clean_config()
-  local fqbn_table = details.get_data_from_config()
+  local data = details.get_data_from_config()
 
   local counter = 0
-  for dirname, _ in pairs(fqbn_table) do
+  for dirname, _ in pairs(data) do
     if not details.is_dir(dirname) then
-      fqbn_table[dirname] = nil
+      data[dirname] = nil
       counter = counter + 1
     end
   end
+
+  utility.write_file(details.config_file, utility.serialize(data))
 
   return ('%s Cleaning done: removed %d entries')
       :format(details.plugname, counter)
