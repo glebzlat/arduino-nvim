@@ -27,7 +27,15 @@ command('ArduinoSetFQBN', function(arg)
   vim.cmd 'doautocmd User ArduinoFqbnReset'
   print(msg)
 end, {
-  nargs = 1
+  nargs = '?'
+})
+
+command('ArduinoChooseBoard', function(arg)
+  local msg = api.set_fqbn(arg.args)
+  vim.cmd 'doautocmd User ArduinoFqbnReset'
+  print(msg)
+end, {
+  nargs = '?'
 })
 
 command('ArduinoClean', function()
