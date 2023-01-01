@@ -6,6 +6,13 @@ local cli = require 'arduino.cli'
 local M = {
   plugname = '[ArduinoLSP.nvim]',
   configname = 'arduinolsp_config',
+
+  current = {
+    configured = false,
+    fqbn = settings.current.default_fqbn,
+    programmer = '',
+    port = ''
+  }
 }
 
 M.config_file = path.concat {
@@ -99,19 +106,17 @@ end
 function M.fqbn_input(str)
   assert(type(str) == "string" or not str)
 
-  local boardlist = M.get_boardlist()
-  local fqbns = boardlist.fqbns
-  local boards = boardlist.boards
+  local boardlist = cli.get_data(
+    cli.list_boards, cli.boardname_regexp)
 
   local num
-  if str == 'list' or utility.is_empty(str) then
-    -- print(utility.serialize(boardlist))
-    print_list(boards)
+  if utility.is_empty(str) then
+    cli.print_data(boardlist)
     str = M.ask_user('Enter the number or FQBN: ')
     num = tonumber(str, 10)
   end
 
-  for index, value in ipairs(fqbns) do
+  for index, value in ipairs(boardlist) do
     if num == index or str == value then
       return value
     end
