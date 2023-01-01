@@ -67,6 +67,14 @@ require 'lspconfig' ['arduino_language_server'].setup {
 Plugin will configure the LSP command, and fully configure yourself,
 when `arduino.on_new_config()` called.
 
+Also you can use `arduino.configure()` function. It gets a root directory as
+an argument and returns command to invoke LSP as a list. I think, it is may 
+be useful in case if you're using something different than nvim-lspconfig.
+
+```lua
+local arduino_cmd = require 'arduino'.configure(vim.fn.getcwd())
+```
+
 ## Get arduino data path automatically
 
 Function `arduino.get_arduinocli_datapath()` will automatically invoke
