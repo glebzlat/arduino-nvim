@@ -8,7 +8,7 @@ local M = {}
 ---Setup function
 ---@param config table
 function M.setup(config)
-  settings.sketchdir = false
+  settings.configured = false
 
   if not config then return end
 
@@ -37,27 +37,33 @@ end
 
 local cli = require 'arduino.cli'
 
----Called by lspconfig, configures language server
+---Configure Arduino.nvim; returns command to call arduino-language-server
+---Can be called manually or used with another lsp configurator
+---@param root_dir string
+---@return table
+function M.configure(root_dir)
+  local current = settings.current
+  local fqbn = details.get_fqbn(root_dir)
+  local cli_congfig = path.concat {
+    current.arduino_config_dir, cli.configfile
+  }
+
+  settings.configured = true
+
+  return {
+    'arduino-language-server',
+    '-cli-config', cli_congfig,
+    '-clangd', current.clangd,
+    '-cli', current.arduino,
+    '-fqbn', fqbn
+  }
+end
+
+---Called by lspconfig, configure Arduino.nvim
 ---@param config table
 ---@param root_dir string
 function M.on_new_config(config, root_dir)
-  local m_settings = settings.current
-  local fqbn = details.get_fqbn(root_dir)
-
-  local config_dir = path.concat {
-    m_settings.arduino_config_dir, cli.configfile
-  }
-
-  settings.config_dir = config_dir
-  settings.sketchdir = true
-
-  config.cmd = {
-    'arduino-language-server',
-    '-cli-config', config_dir,
-    '-clangd', m_settings.clangd,
-    '-cli', settings.current.arduino,
-    '-fqbn', fqbn
-  }
+  config.cmd = M.configure(root_dir)
 end
 
 ---Calls arduino program, parses its data path and returns.
