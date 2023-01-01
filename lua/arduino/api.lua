@@ -8,7 +8,7 @@ local Api = {}
 ---@nodiscard
 ---@return table|string
 function Api.dump_config()
-  if not settings.configured then
+  if not details.current.configured then
     return ('%s Current directory is not a sketch directory')
         :format(details.plugname)
   end
@@ -32,7 +32,7 @@ end
 ---@param fqbn string
 ---@return string
 function Api.set_fqbn(fqbn)
-  if not settings.configured then
+  if not details.current.configured then
     return ('%s Current directory is not a sketch directory')
         :format(details.plugname)
   end
@@ -42,6 +42,7 @@ function Api.set_fqbn(fqbn)
   local data = details.get_data_from_config()
   local dir = vim.fn.getcwd()
   data[dir] = fqbn
+  details.current_fqbn = fqbn
   utility.write_file(details.config_file, utility.serialize(data))
 
   return ('%s New FQBN is set: %s'):format(details.plugname, fqbn)
