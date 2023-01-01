@@ -8,8 +8,6 @@ local M = {}
 ---Setup function
 ---@param config table
 function M.setup(config)
-  settings.configured = false
-
   if not config then return end
 
   settings.set(config)
@@ -48,7 +46,8 @@ function M.configure(root_dir)
     current.arduino_config_dir, cli.configfile
   }
 
-  settings.configured = true
+  details.current_fqbn = fqbn
+  details.current.configured = true
 
   return {
     'arduino-language-server',
