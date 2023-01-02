@@ -49,6 +49,8 @@ function M.configure(root_dir)
   details.current_fqbn = fqbn
   details.current.configured = true
 
+  pcall(details.autocmd_event, 'ArduinoOnNewConfig')
+
   return {
     'arduino-language-server',
     '-cli-config', cli_congfig,

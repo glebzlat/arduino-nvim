@@ -27,6 +27,10 @@ function M.warn(msg)
   vim.notify(M.plugname .. ' warning: ' .. msg, vim.log.levels.WARN)
 end
 
+function M.autocmd_event(event)
+  pcall(vim.cmd, 'doautocmd User ' .. event)
+end
+
 ---Returns true, if o is an executable, false otherwise
 ---@param o string
 ---@nodiscard

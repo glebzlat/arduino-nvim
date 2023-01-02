@@ -45,6 +45,8 @@ function Api.set_fqbn(fqbn)
   details.current_fqbn = fqbn
   utility.write_file(details.config_file, utility.serialize(data))
 
+  details.autocmd_event 'ArduinoFqbnReset'
+
   return ('%s New FQBN is set: %s'):format(details.plugname, fqbn)
 end
 

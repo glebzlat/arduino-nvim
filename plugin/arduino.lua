@@ -24,7 +24,6 @@ end, {})
 
 command('ArduinoSetFQBN', function(arg)
   local msg = api.set_fqbn(arg.args)
-  vim.cmd 'doautocmd User ArduinoFqbnReset'
   print(msg)
 end, {
   nargs = '?'
@@ -32,7 +31,6 @@ end, {
 
 command('ArduinoChooseBoard', function(arg)
   local msg = api.set_fqbn(arg.args)
-  vim.cmd 'doautocmd User ArduinoFqbnReset'
   print(msg)
 end, {
   nargs = '?'
