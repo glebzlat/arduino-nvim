@@ -3,7 +3,9 @@ local utility = require 'arduino.utility'
 local path = require 'arduino.path'
 local details = require 'arduino.details'
 
-local M = {}
+local M = {
+  configured = false
+}
 
 ---Setup function
 ---@param config table
@@ -48,16 +50,21 @@ function M.configure(root_dir)
 
   details.current_fqbn = fqbn
   details.current.configured = true
+  M.configured = true
 
   pcall(details.autocmd_event, 'ArduinoOnNewConfig')
 
-  return {
+  local cmd = {
     'arduino-language-server',
     '-cli-config', cli_congfig,
     '-clangd', current.clangd,
     '-cli', current.arduino,
     '-fqbn', fqbn
   }
+
+  vim.list_extend(cmd, settings.current.extra_opts)
+
+  return cmd
 end
 
 ---Called by lspconfig, configure Arduino.nvim

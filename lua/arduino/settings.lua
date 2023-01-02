@@ -23,6 +23,10 @@ local DEFAULT_SETTINGS = {
   ---Data directory of arduino-cli
   ---@type string
   arduino_config_dir = '',
+
+  --Extra options to arduino-language-server
+  --@type table
+  extra_opts = {},
 }
 
 M._default_settings = DEFAULT_SETTINGS

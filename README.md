@@ -126,6 +126,16 @@ not installed in your $PATH. Though, if you're using
 `get_arduinocli_datapath()` function, you can give a path to arduino as
 its parameter instead of passing it as a field to `setup()`.
 
+`Arduino.nvim` is configured, when `configure()` or `on_new_config()` 
+functions called. Normally it will happen only if lspconfig (or another
+configurator) called they.
+
+You can check inside your config, is `Arduino.nvim` configured:
+
+```lua
+require 'arduino'.configured
+```
+
 ## Autocommands
 
 `Arduino.nvim` has its own events to allow user to customize its behaviour.
@@ -169,6 +179,10 @@ local DEFAULT_SETTINGS = {
   ---Data directory of arduino-cli
   ---@type string
   arduino_config_dir = '',
+
+  --Extra options to arduino-language-server
+  --@type table
+  extra_opts = {},
 }
 ```
 
