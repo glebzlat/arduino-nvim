@@ -1,24 +1,22 @@
-local utility = require 'arduino.utility'
-local settings = require 'arduino.settings'
+local utility = require "arduino.utility"
+local settings = require "arduino.settings"
 local arduino_cli = settings.current.arduino
 
 local Cli = {
   --- Name of arduino-cli configuration file
-  configfile = 'arduino-cli.yaml',
+  configfile = "arduino-cli.yaml",
 
   --- Command to print configuration
-  config_dump = { arduino_cli, 'config', 'dump' },
+  config_dump = { arduino_cli, "config", "dump" },
 
-  list_boards = { arduino_cli, 'board', 'listall' },
+  list_boards = { arduino_cli, "board", "listall" },
 
-  list_connected = { arduino_cli, 'board', 'list' },
+  list_connected = { arduino_cli, "board", "list" },
 
   --- Regex for finding the data path from 'arduino-cli config dump' output
-  data_regexp_pattern =
-  '\\Mdata: \\zs\\[-\\/\\\\.[:alnum:]_~]\\+\\ze\\[[:space:]\\n]',
+  data_regexp_pattern = "\\Mdata: \\zs\\[-\\/\\\\.[:alnum:]_~]\\+\\ze\\[[:space:]\\n]",
 
-  boardname_regexp = '\\M \\zs\\w\\*:\\w\\*:\\w\\*',
-
+  boardname_regexp = "\\M \\zs\\w\\*:\\w\\*:\\w\\*",
 }
 
 ---Invokes cli_command, parses its output with pattern and returns
@@ -29,8 +27,8 @@ local Cli = {
 ---@return table
 ---@nodiscard
 function Cli.get_data(cli_command, pattern)
-  utility.check_type(cli_command, 'string', 'table')
-  utility.check_type(pattern, 'string', 'table')
+  utility.check_type(cli_command, "string", "table")
+  utility.check_type(pattern, "string", "table")
 
   if type(pattern) == "string" then pattern = { pattern } end
   local patterntable_maxn = table.maxn(pattern)
@@ -63,18 +61,18 @@ end
 ---@param data table
 ---@param header string|nil
 function Cli.print_data(data, header)
-  utility.check_type(data, 'table')
-  utility.check_type(header, 'string', 'nil')
+  utility.check_type(data, "table")
+  utility.check_type(header, "string", "nil")
 
   if header then print(header) end
 
   for index, entry in ipairs(data) do
-    local str = index .. ' - '
-    if type(entry) == 'string' then
+    local str = index .. " - "
+    if type(entry) == "string" then
       str = str .. entry
     else
       for _, value in ipairs(entry) do
-        str = str .. value .. ' '
+        str = str .. value .. " "
       end
     end
     print(str)

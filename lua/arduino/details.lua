@@ -1,34 +1,35 @@
-local settings = require 'arduino.settings'
-local utility = require 'arduino.utility'
-local path = require 'arduino.path'
-local cli = require 'arduino.cli'
+local settings = require "arduino.settings"
+local utility = require "arduino.utility"
+local path = require "arduino.path"
+local cli = require "arduino.cli"
 
 local M = {
-  plugname = '[ArduinoLSP.nvim]',
-  configname = 'arduinolsp_config',
+  plugname = "[ArduinoLSP.nvim]",
+  configname = "arduinolsp_config",
 
   current = {
     configured = false,
     fqbn = settings.current.default_fqbn,
-    programmer = '',
-    port = ''
-  }
+    programmer = "",
+    port = "",
+  },
 }
 
 M.config_file = path.concat {
-  settings.current.config_dir, M.configname
+  settings.current.config_dir,
+  M.configname,
 }
 
 function M.error(msg)
-  vim.notify(M.plugname .. ' error: ' .. msg, vim.log.levels.ERROR)
+  vim.notify(M.plugname .. " error: " .. msg, vim.log.levels.ERROR)
 end
 
 function M.warn(msg)
-  vim.notify(M.plugname .. ' warning: ' .. msg, vim.log.levels.WARN)
+  vim.notify(M.plugname .. " warning: " .. msg, vim.log.levels.WARN)
 end
 
 function M.autocmd_event(event)
-  pcall(vim.cmd, 'doautocmd User ' .. event)
+  pcall(vim.cmd, "doautocmd User " .. event)
 end
 
 ---Returns true, if o is an executable, false otherwise
@@ -62,7 +63,7 @@ function M.get_data_from_config()
   fqbn_table, message = utility.deserialize(data)
 
   if not fqbn_table then
-    M.warn(('Config deserialization error: %s'):format(message))
+    M.warn(("Config deserialization error: %s"):format(message))
     return {}
   end
 
@@ -77,7 +78,7 @@ function M.get_boardlist()
     if i ~= 1 and not utility.is_empty(line) then
       local s, e = regex:match_str(line)
       if not s then
-        M.warn('get_boardlist regexp error')
+        M.warn "get_boardlist regexp error"
         break
       end
       fqbns[i - 1] = string.sub(line, s + 1, e)
@@ -88,7 +89,7 @@ end
 
 local function print_list(list)
   for index, value in ipairs(list) do
-    print(index .. ' - ' .. value)
+    print(index .. " - " .. value)
   end
 end
 
@@ -99,8 +100,9 @@ end
 function M.ask_user(prompt)
   assert(type(prompt) == "string")
   local result
-  vim.ui.input({ prompt = prompt },
-    function(input) result = input end)
+  vim.ui.input({ prompt = prompt }, function(input)
+    result = input
+  end)
   return result
 end
 
@@ -110,25 +112,21 @@ end
 function M.fqbn_input(str)
   assert(type(str) == "string" or not str)
 
-  local boardlist = cli.get_data(
-    cli.list_boards, cli.boardname_regexp)
+  local boardlist = cli.get_data(cli.list_boards, cli.boardname_regexp)
 
   local num
   if utility.is_empty(str) then
     cli.print_data(boardlist)
-    str = M.ask_user('Enter the number or FQBN: ')
+    str = M.ask_user "Enter the number or FQBN: "
     num = tonumber(str, 10)
   end
 
   for index, value in ipairs(boardlist) do
-    if num == index or str == value then
-      return value
-    end
+    if num == index or str == value then return value end
   end
 
   local default = settings.current.default_fqbn
-  M.warn(('Incorrect FQBN: %s, defaulting to %s')
-    :format(str, default))
+  M.warn(("Incorrect FQBN: %s, defaulting to %s"):format(str, default))
   return default
 end
 
@@ -138,14 +136,13 @@ function M.get_fqbn(directory)
 
   if fqbn then return fqbn end
 
-  fqbn = M.ask_user(('%s enter the FQBN: '):format(M.plugname))
+  fqbn = M.ask_user(("%s enter the FQBN: "):format(M.plugname))
   fqbn = M.fqbn_input(fqbn)
   data[directory] = fqbn
 
   utility.write_file(M.config_file, utility.serialize(data))
 
   return fqbn
-
 end
 
 return M
