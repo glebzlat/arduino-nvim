@@ -1,7 +1,7 @@
 -- file from mason.nvim
 -- mason-core/path.lua
 
-local utility = require "arduino.utility"
+local utility = require "arduino-core.utility"
 
 local sep = (function()
   ---@diagnostic disable-next-line: undefined-global

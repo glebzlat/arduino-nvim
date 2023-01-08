@@ -2,14 +2,14 @@
 
 Simple wrapper for arduino-language-server, written in Lua.
 Arduino-language-server is not fully bootstrapped out of the box,
-it requires the FQBN (Fully Qualified Board Name) and the 
+it requires the FQBN (Fully Qualified Board Name) and the
 arduino-cli config. This wrapper stores configs for lsp for each
 sketch directory and manages FQBNs.
 
-*:zap::zap::zap:Plugin is under development. Something may not work, 
-documentation may differ with the code and some features may be undocumented 
-at all. If you found a mistake, or you have an idea how to improve 
-*`Arduino.nvim`*, feel free to create an issue or open a pull request. 
+*:zap::zap::zap:Plugin is under development. Something may not work,
+documentation may differ with the code and some features may be undocumented
+at all. If you found a mistake, or you have an idea how to improve
+*`Arduino.nvim`*, feel free to create an issue or open a pull request.
 Enjoy!:zap::zap::zap:*
 
 # Table of Contents
@@ -17,12 +17,10 @@ Enjoy!:zap::zap::zap:*
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Setup](#setup)
-    - [Get arduino data path automatically](#get-arduino-data-path-automatically)
     - [Clang via Mason.nvim](#clang-via-mason.nvim)
 - [Commands](#commands)
 - [Configuration](#configuration)
     - [Autocommands](#autocommands)
-    - [Default configuration](#default-configuration)
 - [Limitations](#limitations)
 
 # Requirements
@@ -34,7 +32,6 @@ All requirements are:
 - arduino-cli
 - clangd
 - arduino-language-server
-- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
 
 # Installation
 
@@ -52,9 +49,14 @@ Plug 'edKotinsky/arduino.nvim'
 
 # Setup
 
+You must manually specify path to clangd and path to arduino, if they're
+not installed in your $PATH. Plugin will try to locate clangd, arduino-cli 
+and arduino-cli data path automatically, however, if they're not found, 
+corresponding fields will be empty.
+
 ```lua
 require 'arduino'.setup({
-    arduino_cli_config_dir = arduino.get_arduinocli_datapath()
+    
 })
 ```
 
@@ -64,69 +66,49 @@ require 'lspconfig' ['arduino_language_server'].setup {
 }
 ```
 
+This plugin does not depend on nvim-lspconfig. However, I have not tested it
+with another configurators, so, if you wanna help, you can find a way to use
+`Arduino.nvim` with your configurator and test it.
+
 Plugin will configure the LSP command, and fully configure yourself,
 when `arduino.on_new_config()` called.
 
 Also you can use `arduino.configure()` function. It gets a root directory as
-an argument and returns command to invoke LSP as a list. I think, it is may 
+an argument and returns command to invoke LSP as a list. I think, it is may
 be useful in case if you're using something different than nvim-lspconfig.
 
 ```lua
 local arduino_cmd = require 'arduino'.configure(vim.fn.getcwd())
 ```
 
-## Get arduino data path automatically
-
-Function `arduino.get_arduinocli_datapath()` will automatically invoke
-arduino-cli and ask it for a path. You can pass a path to arduino
-to this function. In this case function will store this path
-to the configs, and, as its called before `setup()` function, you 
-don't need to specify this parameter on setup.
-
-Though the `arduino.get_arduinocli_datapath()` function
-makes setup easer, it can slow down setup process a bit,
-so you can get this path manually from `arduino-cli config dump`
-command output (line "Data: /path/to/.arduino"). 
-
 ## Clangd via Mason.nvim
 
 If you have not clangd installed in your system, but it is installed via
-[mason.nvim](https://github.com/williamboman/mason.nvim), you can get a 
-path to it by this way:
+[mason.nvim](https://github.com/williamboman/mason.nvim), you can get a
+[package path](https://github.com/williamboman/mason.nvim/blob/main/doc/reference.md#packageget_install_path):
 
 ```lua
--- This is a default mason path
-local mason_root_dir = vim.fn.stdpath 'data' .. '/mason'
-
-require 'mason'.setup({
-    install_root_dir = mason_root_dir
-    -- other settings
-})
+local clangd_path = require 'mason-registry'.get_package('clangd'):get_install_path()
 
 require 'arduino'.setup({
-    clangd = mason_root_dir .. '/bin/clangd',
+    clangd = clangd_path,
     -- other settings
 })
 ```
 
 # Commands
 
-- `:ArduinoSetFQBN [fqbn]` - set fqbn to the current sketch. You can create 
+- `:ArduinoSetFQBN [fqbn]` - set fqbn to the current sketch. You can create
 autocommand to be executed right after this command performed. So you don't
 need to restart nvim after resetting FQBN, see [autocommands](#autocommands).
 Without argument, will present choose dialog.
-- `:ArduinoChooseBoard` - same as `:ArduinoSetFQBN`.
+- `:ArduinoChooseBoard [fqbn]` - same as `:ArduinoSetFQBN`.
 - `:ArduinoDump` - prints current config
 - `:ArduinoClean` - removes nonexistent sketch directories from config
 
 # Configuration
 
-You must manually specify path to clangd, path to arduino, if they're
-not installed in your $PATH. Though, if you're using 
-`get_arduinocli_datapath()` function, you can give a path to arduino as
-its parameter instead of passing it as a field to `setup()`.
-
-`Arduino.nvim` is configured, when `configure()` or `on_new_config()` 
+`Arduino.nvim` is configured, when `configure()` or `on_new_config()`
 functions called. Normally it will happen only if lspconfig (or another
 configurator) called they.
 
@@ -152,40 +134,6 @@ vim.api.nvim_create_autocmd('User', {
 })
 ```
 
-## Default configuration
-
-Plugin will try to locate clangd and arduino-cli automatically,
-however, if they're not found, corresponding fields will be empty.
-
-```lua
-local DEFAULT_SETTINGS = {
-  ---Plugin will set FQBN of the current sketch to default, if
-  ---user not specified it
-  ---@type string
-  default_fqbn = 'arduino:avr:uno',
-
-  ---Directory where Arduino.nvim will store its data
-  ---@type string
-  config_dir = path.concat { vim.fn.stdpath 'data', 'arduino_nvim' },
-
-  ---Path to clangd executable
-  ---@type string|nil Nil if clangd is not found
-  clangd = path.find_path { 'clangd' },
-
-  ---Path to arduino-cli executable
-  ---@type string|nil Nil if arduino-cli is not found
-  arduino = path.find_path { 'arduino-cli' },
-
-  ---Data directory of arduino-cli
-  ---@type string
-  arduino_config_dir = '',
-
-  --Extra options to arduino-language-server
-  --@type table
-  extra_opts = {},
-}
-```
-
 # Limitations
 
 To initialize `Arduino.nvim` in a sketch directory, you need to
@@ -202,4 +150,3 @@ a mistake, just clangd is not configured. Stop it with `:LspStop clangd`.
 
 If your arduino-language-server is really slow, it is not caused by the plugin.
 Though, I will work on it.
-

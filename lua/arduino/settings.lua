@@ -1,4 +1,4 @@
-local path = require "arduino.path"
+local path = require "arduino-core.path"
 
 local M = {}
 
