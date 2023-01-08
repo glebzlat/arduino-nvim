@@ -8,10 +8,6 @@ local DEFAULT_SETTINGS = {
   ---@type string
   default_fqbn = "arduino:avr:uno",
 
-  ---Directory where Arduino.nvim will store its data
-  ---@type string
-  config_dir = path.concat { vim.fn.stdpath "data", "arduino_nvim" },
-
   ---Path to clangd executable
   ---@type string|nil Nil if clangd is not found
   clangd = path.find_path { "clangd" },
