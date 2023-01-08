@@ -54,10 +54,24 @@ not installed in your $PATH. Plugin will try to locate clangd, arduino-cli
 and arduino-cli data path automatically, however, if they're not found, 
 corresponding fields will be empty.
 
+Default settings:
+
 ```lua
-require 'arduino'.setup({
-    
-})
+require('arduino').setup {
+    default_fqbn = "arduino:avr:uno",
+
+    --Path to clangd (all paths must be full)
+    clangd = <path/to/your/clangd>,
+
+    --Path to arduino-cli
+    arduino = <path/to/arduino-cli>,
+
+    --Data directory of arduino-cli
+    arduino_config_dir = <arduino-cli/data/dir>,
+
+    --Extra options to arduino-language-server
+    extra_opts = { "...", ... }
+}
 ```
 
 ```lua
@@ -127,10 +141,10 @@ You can automatically restart LSP to apply board change:
 
 ```lua
 vim.api.nvim_create_autocmd('User', {
-  pattern = 'ArduinoFqbnReset',
-  callback = function()
-    vim.cmd('LspRestart')
-  end
+    pattern = 'ArduinoFqbnReset',
+    callback = function()
+        vim.cmd('LspRestart')
+    end
 })
 ```
 

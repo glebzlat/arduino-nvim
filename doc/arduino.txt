@@ -1,0 +1,134 @@
+*arduino.nvim*                                  Arduino support for nvim
+                                                0.1.0-alpha
+
+==============================================================================
+
+CONTENTS                                        *arduino.nvim-contents*
+
+    Intoduction ............................ |arduino.nvim-intro|
+    Requirements ........................... |arduino.nvim-requirements|
+    Setup .................................. |arduino.nvim-setup|
+    Commands ............................... |arduino.nvim-commands|
+    Autocommands ........................... |arduino.nvim-autocommands|
+    Configuration .......................... |arduino.nvim-config|
+    Limitations ............................ |arduino.nvim-limitations|
+
+==============================================================================
+
+INTRODUCTION                                  *arduino.nvim-intro*
+
+Simple wrapper for arduino-language-server. Arduino-language-server is not 
+fully bootstrapped out of the box, it requires the FQBN (Fully Qualified 
+Board Name) and the arduino-cli config. This wrapper stores configs for lsp 
+for each sketch directory and manages FQBNs.
+
+    Note: ~
+        Plugin is under active development. Documentation may not correspond
+        with actual plugin capabilities and something may be broken.
+        If you discovered a bug, or want to help, create an issue or open PR:
+        https://github.com/edKotinsky/Arduino.nvim
+
+REQUIREMENTS                                  *arduino.nvim-requirements*
+
+    neovim `>= 0.7.0` (may work on older versions, not tested)
+    arduino-language-server
+    clangd
+    arduino-cli
+
+==============================================================================
+
+SETUP                                         *arduino.nvim-setup*
+
+You must manually specify path to clangd and path to arduino, if they're not 
+installed in your `$PATH`. Plugin will try to locate clangd, arduino-cli and 
+arduino-cli data path automatically, however, if they're not found, 
+corresponding fields will be empty.
+
+>
+    require('arduino').setup({
+    
+    })
+
+    require 'lspconfig' ['arduino_language_server'].setup {
+        on_new_config = arduino.on_new_config,
+    }
+<
+
+This plugin does not depend on nvim-lspconfig. However, I have not tested it 
+with another configurators, so, if you wanna help, you can find a way to use 
+Arduino.nvim with your configurator and test it.
+
+Plugin will configure the LSP command, and fully configure yourself, when 
+`arduino.on_new_config()` called.
+
+Also you can use `arduino.configure()` function. It gets a root directory as 
+an argument and returns command to invoke LSP as a list. I think, it is may 
+be useful in case if you're using something different than nvim-lspconfig.
+
+==============================================================================
+
+COMMANDS                                      *arduino.nvim-commands*
+
+:ArduinoSetFQBN [fqbn]                              *ArduinoSetFQBN*
+    set fqbn to the current sketch. You can create autocommand to be executed 
+    right after this command performed. So you don't need to restart nvim after 
+    resetting FQBN, see |arduino.nvim-autocommands|. Without argument, will 
+    present choose dialog.
+
+:ArduinoChooseBoard [fqbn]                          *ArduinoChooseBoard*
+    same as `:ArduinoSetFQBN`
+
+:ArduinoDump                                        *ArduinoDump*
+    prints current config
+
+:ArduinoClean                                       *ArduinoClean*
+    removes nonexistent sketch directories from config
+
+==============================================================================
+
+AUTOCOMMANDS                                  *arduino.nvim-autocommands*
+
+Arduino.nvim has its own events to allow user to customize its behaviour.
+
+ArduinoFqbnReset 
+    after `:ArduinoSetFQBN` and `:ArduinoChooseBoard`. You can automatically 
+    restart LSP to apply board change:
+>
+    vim.api.nvim_create_autocmd('User', {
+        pattern = 'ArduinoFqbnReset',
+        callback = function()
+            vim.cmd('LspRestart')
+        end
+    })
+<
+
+==============================================================================
+
+CONFIGURATION                                 *arduino.nvim-config*
+
+Arduino.nvim is configured, when `configure()` or `on_new_config()` functions 
+called. Normally it will happen only if lspconfig (or another configurator) 
+called they.
+
+You can check inside your config, is Arduino.nvim configured: >
+
+    require 'arduino'.configured
+
+==============================================================================
+
+LIMITATIONS                                   *arduino.nvim-limitations*
+
+To initialize Arduino.nvim in a sketch directory, you need to open .ino 
+file first (of course, if you have any files except .ino).
+
+If Arduino.nvim is not initialized, invocation of `:ArduinoDump` and 
+`:ArduinoSetFQBN` commands has no effect.
+
+If you have clangd installed and you open a C/C++ file while Arduino.nvim 
+configured, nvim-lspconfig will attach both clangd and 
+arduino-language-server. Clangd without compile_commands.json will give a 
+lot of errors. It is not a mistake, just clangd is not configured. 
+Stop it with `:LspStop clangd`. Fix will be soon.
+
+
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
