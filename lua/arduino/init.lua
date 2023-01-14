@@ -16,6 +16,7 @@ end
 ---@param root_dir string
 ---@return table
 function M.configure(root_dir)
+  M.configured = true
   return require "arduino.api".configure(root_dir)
 end
 
