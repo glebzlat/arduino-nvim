@@ -1,9 +1,7 @@
 local M = {}
 
 function M.is_empty(str)
-  if type(str) ~= 'string' or str == '' then
-    return true
-  end
+  if type(str) ~= "string" or str == "" then return true end
   return false
 end
 
@@ -20,33 +18,31 @@ function M.check_type(o, ...)
     if type == typename then return true end
   end
 
-  local typenames = ''
+  local typenames = ""
   for _, typename in ipairs(args) do
-    typenames = typenames .. ' ' .. typename
+    typenames = typenames .. " " .. typename
   end
 
-  error('Type check failed: expected ' .. typenames .. ' got ' .. type)
+  error("Type check failed: expected " .. typenames .. " got " .. type)
   return false
 end
 
 local function serialize_impl(o, level)
-  if type(o) == 'string' then return '"' .. o .. '"' end
-  if type(o) ~= 'table' then return tostring(o) end
+  if type(o) == "string" then return '"' .. o .. '"' end
+  if type(o) ~= "table" then return tostring(o) end
 
-  local result = ''
-  local indent = string.rep('\t', level)
+  local result = ""
+  local indent = string.rep("\t", level)
 
-  result = result .. '{\n'
+  result = result .. "{\n"
   for key, value in pairs(o) do
-    if type(key) ~= 'number' then key = '"' .. key .. '"' end
-    result = result .. indent .. '\t[' .. key .. '] = '
+    if type(key) ~= "number" then key = '"' .. key .. '"' end
+    result = result .. indent .. "\t[" .. key .. "] = "
     local sublevel = level
-    if type(value) == 'table' then
-      sublevel = sublevel + 1
-    end
-    result = result .. serialize_impl(value, sublevel) .. ',\n'
+    if type(value) == "table" then sublevel = sublevel + 1 end
+    result = result .. serialize_impl(value, sublevel) .. ",\n"
   end
-  result = result .. indent .. '}'
+  result = result .. indent .. "}"
   return result
 end
 
@@ -76,15 +72,15 @@ function M.deserialize(str, vars)
 end
 
 function M.read_file(filename)
-  local file, msg = io.open(filename, 'r')
+  local file, msg = io.open(filename, "r")
   if not file then return nil, msg end
-  local str = file:read("a")
+  local str = file:read "a"
   file:close()
   return str
 end
 
 function M.write_file(filename, str)
-  local file, msg = io.open(filename, 'w')
+  local file, msg = io.open(filename, "w")
   if not file then return nil, msg end
   _, msg = file:write(str)
   file:close()

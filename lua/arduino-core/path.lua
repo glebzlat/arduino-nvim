@@ -1,7 +1,7 @@
 -- file from mason.nvim
 -- mason-core/path.lua
 
-local utility = require 'arduino.utility'
+local utility = require "arduino-core.utility"
 
 local sep = (function()
   ---@diagnostic disable-next-line: undefined-global
@@ -29,7 +29,8 @@ end
 ---@path root_path string
 ---@path path string
 function M.is_subdirectory(root_path, path)
-  return root_path == path or path:sub(1, #root_path + 1) == root_path .. sep
+  return root_path == path
+    or path:sub(1, #root_path + 1) == root_path .. sep
 end
 
 function M.find_path(programs)
@@ -41,9 +42,7 @@ function M.find_path(programs)
 
     local programpath = vim.fn.exepath(programname)
 
-    if not utility.is_empty(programpath) then
-      return programpath
-    end
+    if not utility.is_empty(programpath) then return programpath end
   end
 
   return nil
