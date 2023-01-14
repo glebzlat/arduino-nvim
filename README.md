@@ -11,7 +11,7 @@ sketch directory and manages FQBNs.
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Setup](#setup)
-    - [Clang via Mason.nvim](#clang-via-masonnvim)
+    - [Clang via Mason.nvim](#clangd-via-masonnvim)
 - [Commands](#commands)
 - [Configuration](#configuration)
     - [Autocommands](#autocommands)
