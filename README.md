@@ -6,22 +6,17 @@ it requires the FQBN (Fully Qualified Board Name) and the
 arduino-cli config. This wrapper stores configs for lsp for each
 sketch directory and manages FQBNs.
 
-*:zap::zap::zap:Plugin is under development. Something may not work,
-documentation may differ with the code and some features may be undocumented
-at all. If you found a mistake, or you have an idea how to improve
-*`Arduino.nvim`*, feel free to create an issue or open a pull request.
-Enjoy!:zap::zap::zap:*
-
 # Table of Contents
 
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Setup](#setup)
-    - [Clang via Mason.nvim](#clang-via-mason.nvim)
+    - [Clang via Mason.nvim](#clang-via-masonnvim)
 - [Commands](#commands)
 - [Configuration](#configuration)
     - [Autocommands](#autocommands)
 - [Limitations](#limitations)
+- [License](#license)
 
 # Requirements
 
@@ -70,11 +65,9 @@ require('arduino').setup {
     arduino_config_dir = <arduino-cli/data/dir>,
 
     --Extra options to arduino-language-server
-    extra_opts = { "...", ... }
+    extra_opts = { ... }
 }
-```
 
-```lua
 require 'lspconfig' ['arduino_language_server'].setup {
     on_new_config = arduino.on_new_config,
 }
@@ -84,12 +77,10 @@ This plugin does not depend on nvim-lspconfig. However, I have not tested it
 with another configurators, so, if you wanna help, you can find a way to use
 `Arduino.nvim` with your configurator and test it.
 
-Plugin will configure the LSP command, and fully configure yourself,
-when `arduino.on_new_config()` called.
-
-Also you can use `arduino.configure()` function. It gets a root directory as
-an argument and returns command to invoke LSP as a list. I think, it is may
-be useful in case if you're using something different than nvim-lspconfig.
+`configure()` returns a command to launch arduino-language-server if the
+plugin is configured properly, and fully configures a plugin. After this
+function call plugin commands becomes accesible. `on_new_config()` actually
+just a wrapper for `configure()` for better usability with lspconfig.
 
 ```lua
 local arduino_cmd = require 'arduino'.configure(vim.fn.getcwd())
@@ -98,14 +89,11 @@ local arduino_cmd = require 'arduino'.configure(vim.fn.getcwd())
 ## Clangd via Mason.nvim
 
 If you have not clangd installed in your system, but it is installed via
-[mason.nvim](https://github.com/williamboman/mason.nvim), you can get a
-[package path](https://github.com/williamboman/mason.nvim/blob/main/doc/reference.md#packageget_install_path):
+[mason.nvim](https://github.com/williamboman/mason.nvim):
 
 ```lua
-local clangd_path = require 'mason-registry'.get_package('clangd'):get_install_path()
-
 require 'arduino'.setup({
-    clangd = clangd_path,
+    clangd = require 'mason-core.path'.bin_prefix 'clangd',
     -- other settings
 })
 ```
@@ -153,14 +141,13 @@ vim.api.nvim_create_autocmd('User', {
 To initialize `Arduino.nvim` in a sketch directory, you need to
 open .ino file first (of course, if you have any files except .ino).
 
-If `Arduino.nvim` is not initialized, invocation of
-`:ArduinoDump` and `:ArduinoSetFQBN` commands has no effect.
-
 If you have clangd installed and you open a C/C++ file while `Arduino.nvim`
 configured, nvim-lspconfig will attach both clangd and arduino-language-server.
 Clangd without compile_commands.json will give a lot of errors. It is not
 a mistake, just clangd is not configured. Stop it with `:LspStop clangd`.
 *Fix will be soon*.
 
-If your arduino-language-server is really slow, it is not caused by the plugin.
-Though, I will work on it.
+# License
+
+`Arduino.nvim` licensed under the MIT License. Check the [LICENSE](./LICENSE) 
+file.
