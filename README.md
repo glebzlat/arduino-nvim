@@ -149,5 +149,5 @@ a mistake, just clangd is not configured. Stop it with `:LspStop clangd`.
 
 # License
 
-`Arduino.nvim` licensed under the MIT License. Check the [LICENSE](./LICENSE) 
+`Arduino.nvim` licensed under the MIT License. Check the [LICENSE](./LICENSE.md) 
 file.
