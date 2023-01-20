@@ -33,13 +33,13 @@ All requirements are:
 ## [Packer](https://github.com/wbthomason/packer.nvim)
 
 ```lua
-use 'edKotinsky/arduino.nvim'
+use 'edKotinsky/Arduino.nvim'
 ```
 
 ## vim-plug
 
 ```vim
-Plug 'edKotinsky/arduino.nvim'
+Plug 'edKotinsky/Arduino.nvim'
 ```
 
 # Setup

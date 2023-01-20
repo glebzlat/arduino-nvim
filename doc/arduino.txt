@@ -43,17 +43,27 @@ You must manually specify path to clangd and path to arduino, if they're not
 installed in your `$PATH`. Plugin will try to locate clangd, arduino-cli and 
 arduino-cli data path automatically, however, if they're not found, 
 corresponding fields will be empty.
-
 >
-    require('arduino').setup({
-    
-    })
+    require('arduino').setup {
+	default_fqbn = "arduino:avr:uno",
+
+	--Path to clangd (all paths must be full)
+	clangd = <path/to/your/clangd>,
+
+	--Path to arduino-cli
+	arduino = <path/to/arduino-cli>,
+
+	--Data directory of arduino-cli
+	arduino_config_dir = <arduino-cli/data/dir>,
+
+	--Extra options to arduino-language-server
+	extra_opts = { ... }
+    }
 
     require 'lspconfig' ['arduino_language_server'].setup {
-        on_new_config = arduino.on_new_config,
+	on_new_config = arduino.on_new_config,
     }
 <
-
 This plugin does not depend on nvim-lspconfig. However, I have not tested it 
 with another configurators, so, if you wanna help, you can find a way to use 
 Arduino.nvim with your configurator and test it.
