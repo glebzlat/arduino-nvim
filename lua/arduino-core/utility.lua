@@ -46,6 +46,10 @@ local function serialize_impl(o, level)
   return result
 end
 
+---Serialized lua table into a string
+---@param o table
+---@return string
+---@deprecated
 function M.serialize(o)
   return serialize_impl(o, 0)
 end
@@ -55,6 +59,7 @@ local function condfail(cond, ...)
   return ...
 end
 
+---@deprecated
 function M.deserialize(str, vars)
   -- create dummy environment
   local env = vars and setmetatable({}, { __index = vars }) or {}
