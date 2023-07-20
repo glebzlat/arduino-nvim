@@ -1,4 +1,5 @@
 local settings = require "arduino.settings"
+local data = require "arduino-core.data"
 
 local M = {
   configured = false,
@@ -8,6 +9,7 @@ local M = {
 ---@param config table
 function M.setup(config)
   if not config then return end
+  data.ensure_path()
   settings.set(config)
 end
 

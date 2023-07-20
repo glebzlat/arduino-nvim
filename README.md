@@ -1,5 +1,11 @@
 # Arduino.nvim
 
+_Disclaimer: there is a lot of changes I want to make in this project, particularly
+about configuration - arduino-cli itself has great configuration files, so it is
+possible just to create and to use them. In the current stage this project
+is really raw and it annoys me. But unfortunately currenty I have no much time
+to maintain it. So there will be breaking changes, maybe soon, maybe not._
+
 Simple wrapper for arduino-language-server, written in Lua.
 Arduino-language-server is not fully bootstrapped out of the box,
 it requires the FQBN (Fully Qualified Board Name) and the
