@@ -1,4 +1,4 @@
-local path = require "arduino-nvim.path_util"
+local path = require("arduino-nvim.path_util")
 local path_concat = path.concat
 local json_decode = vim.json.decode
 
@@ -21,8 +21,8 @@ end
 ---@return table|nil
 ---@nodiscard
 function Cli:invoke_cli(cmd)
-  cmd:insert "---format"
-  cmd:insert "json"
+  cmd:insert("---format")
+  cmd:insert("json")
   local ok, data = pcall(vim.fn.system, cmd)
   if not ok then return nil end
   ok, data = pcall(json_decode, data)
@@ -47,7 +47,7 @@ function Cli:get_configfile_path()
   local filename = "arduino-cli.yaml"
   local config_path = self:get_arduino_config_dir()
   if not config_path then return nil end
-  return path_concat { config_path, filename }
+  return path_concat({ config_path, filename })
 end
 
 ---Returns result of `arduino-cli board listall` command in json.
