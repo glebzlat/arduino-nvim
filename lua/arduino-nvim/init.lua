@@ -8,7 +8,7 @@ function Arduino:setup(config)
   end
   Arduino_nvim = self
   local m_config = require "arduino-nvim.config"
-  self.config = m_config
+  self.config = m_config:init(config)
 
   return self
 end

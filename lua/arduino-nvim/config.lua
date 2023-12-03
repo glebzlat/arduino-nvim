@@ -16,9 +16,17 @@ local Config = {
   extra_opts = {},
 }
 
-function Config:init()
-  self.arduino = self["arduino-cli"] or exepath "arduino-cli"
-  self.clangd = self["clangd"] or exepath "clangd"
+---Initialize config
+---TODO: Add config validation
+---@param config table
+---@return Config
+---@nodiscard
+function Config:init(config)
+  self.arduino = config["arduino"] or exepath "arduino-cli"
+  self.clangd = config["clangd"] or exepath "clangd"
+  self.extra_opts = config["extra_opts"]
+  self.default_fqbn = config["default_fqbn"]
+
   self.m_arduino_cli = cli:init(self.arduino)
   self.arduino_config_dir = self.m_arduino_cli:get_arduino_config_dir()
 
