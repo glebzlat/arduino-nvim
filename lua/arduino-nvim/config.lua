@@ -1,4 +1,4 @@
-local cli = require "arduino-nvim.cli"
+local cli = require("arduino-nvim.cli")
 local exepath = vim.fn.exepath
 
 ---@class Config
@@ -17,20 +17,46 @@ local Config = {
 }
 
 ---Initialize config
----TODO: Add config validation
 ---@param config table
 ---@return Config
 ---@nodiscard
 function Config:init(config)
-  self.arduino = config["arduino"] or exepath "arduino-cli"
-  self.clangd = config["clangd"] or exepath "clangd"
-  self.extra_opts = config["extra_opts"]
-  self.default_fqbn = config["default_fqbn"]
+  self.arduino = self.validate(config["arduino"], { "string", "nil" })
+    or exepath("arduino-cli")
+  self.clangd = self.validate(config["clangd"], { "string", "nil" })
+    or exepath("clangd")
+  self.extra_opts = self.validate(config["extra_opts"], { "table", "nil" })
+  self.default_fqbn = self.validate(config["default_fqbn"], { "string", "nil" })
+    or self.default_fqbn
 
   self.m_arduino_cli = cli:init(self.arduino)
   self.arduino_config_dir = self.m_arduino_cli:get_arduino_config_dir()
 
   return self
+end
+
+---Validate type of a value against types. `types` may be a table of types or
+---a single type. If `type(value)` found in `types`, then the value is returned.
+---Otherwise, exception will be raised.
+---@param value any
+---@param types table|type
+---@return any
+---@nodiscard
+function Config.validate(value, types)
+  if type(types) ~= "table" then
+    if type(value) == type(types) then return value end
+  else
+    for _, t in ipairs(types) do
+      if type(value) == t then return value end
+    end
+  end
+  error(
+    "Config.validate: expected value of type "
+      .. table.concat(types, "|")
+      .. ", got value of type '"
+      .. type(value)
+      .. "'"
+  )
 end
 
 return Config
