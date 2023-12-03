@@ -50,9 +50,12 @@ function Config.validate(value, types)
       if type(value) == t then return value end
     end
   end
+  if type(types) == "table" then
+    types = table.concat(types, "|")
+  end
   error(
     "Config.validate: expected value of type "
-      .. table.concat(types, "|")
+      .. types
       .. ", got value of type '"
       .. type(value)
       .. "'"
