@@ -6,11 +6,9 @@ local fn = vim.fn
 local _Arduino = {}
 
 ---@class ArduinoLSPCallbacks
----@field on_attach function(client, bufnr: integer)
+---@field on_attach? function(client, bufnr: integer)
 
 ---@class ArduinoNvimConfig
----@field config_path? string Path to a dir/file, where plugin will store
----                           its data
 ---@field default_fqbn? string Default FQBN
 ---@field clangd? string Path to `clangd` executable
 ---@field arduino? string Path to `arduino-cli` executable
@@ -18,7 +16,7 @@ local _Arduino = {}
 ---@field root_dir? string Path to the project root
 ---@field capabilities? table Client capabilities
 ---@field filetypes? table LSP filetypes
----@field callbacks ArduinoLSPCallbacks
+---@field callbacks? ArduinoLSPCallbacks
 local _Config = {
   config_path = path.concat({ fn.stdpath("data"), "arduino-nvim.json" }),
   default_fqbn = "arduino:avr:uno",
