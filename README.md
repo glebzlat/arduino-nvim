@@ -2,18 +2,6 @@
 
 Simple Arduino-language-server bootstrapper.
 
-# Table of Contents
-
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Setup](#setup)
-    - [Clang via Mason.nvim](#clangd-via-masonnvim)
-- [Commands](#commands)
-- [Configuration](#configuration)
-    - [Autocommands](#autocommands)
-- [Limitations](#limitations)
-- [License](#license)
-
 # Requirements
 
 - arduino-cli
@@ -26,7 +14,7 @@ Simple Arduino-language-server bootstrapper.
 
 ```lua
 {
-  "glebzlat/Arduino.nvim",
+  "glebzlat/arduino-nvim",
   config = {
     function() require("arduino-nvim").setup() end,
     filetype = "arduino",
@@ -59,5 +47,5 @@ require("arduino-nvim").setup {
 
 # License
 
-`Arduino.nvim` licensed under the MIT License. Check the [LICENSE](./LICENSE.md) 
+`arduino-nvim` licensed under the MIT License. Check the [LICENSE](./LICENSE.md)
 file.
