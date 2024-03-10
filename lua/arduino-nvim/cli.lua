@@ -82,14 +82,4 @@ function ArduinoCli.sort_boards_by_platform(boards)
   return platforms
 end
 
-function ArduinoCli:lsp_command(extra_opts)
-  local cmd = {
-    "arduino-language-server",
-    "-cli-config",
-    self:get_configfile_path(),
-    "-clangd",
-  }
-  return cmd
-end
-
 return ArduinoCli
