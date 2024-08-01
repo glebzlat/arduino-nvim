@@ -18,9 +18,7 @@ Simple Arduino-language-server bootstrapper.
   config = {
     function() require("arduino-nvim").setup() end,
     filetype = "arduino",
-  },
-  dev = true,
-  dir = "~/Documents/dev/neovim/Arduino.nvim"
+  }
 }
 ```
 
