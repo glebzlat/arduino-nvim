@@ -37,7 +37,7 @@ function ArduinoCli:get_arduino_config_dir()
   local cmd = { self.arduino, "config", "dump" }
   local data = self:invoke_cli(cmd)
   if not data then return nil end
-  return data["directories"]["data"]
+  return data["config"]["directories"]["data"]
 end
 
 ---Returns path of a `arduino-cli.yaml` file. `nil` if failed.
