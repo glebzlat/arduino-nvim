@@ -60,7 +60,7 @@ function Lsp.start(command, bufnr, config)
     filetypes = filetypes,
   }
 
-  vim.tbl_deep_extend("keep", cfg, config.callbacks)
+  vim.tbl_deep_extend("keep", cfg, config.callbacks or {})
 
   vim.lsp.start(cfg, {})
 end
